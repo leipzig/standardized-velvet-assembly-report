@@ -1,0 +1,3 @@
+#!/usr/bin/perl
+while(<>){if(/>/){$tot++}else{chomp;$sum+=length($_);}}
+print $tot." seqs\t".$sum." bp\n";
