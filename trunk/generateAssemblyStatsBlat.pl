@@ -30,6 +30,7 @@ if(scalar(@blatfiles)){
     close(BLAT);
 
 #length of all decent blatted queries
+$blatLen=0;
 foreach $q(keys %lengths)
 {$blatLen+=$lengths{$q}}
 
@@ -37,12 +38,14 @@ foreach $q(keys %lengths)
 $blatWin=scalar(keys(%winners));
 
 #find distinctive blat hits
+$uniqueHits=0;
 foreach $h(keys(%winners)){
     if($winners{$h}==1){$uniqueHits++}
 }
 }#if blatfile
 
 open(CONTIGS,"<$rootDir/contigs.fa");
+$totBP=0;$goodContigs=0;
 while(<CONTIGS>)
 {
     chomp();
