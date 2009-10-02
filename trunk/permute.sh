@@ -16,8 +16,7 @@ do
     fi
     for cvCut in 10 6 4 3 2
     do
-    for expCov in 4
-    do
+    expCov=$((2*$cvCut))
                 dirName="out_"$1"_"$kmer"_"$cvCut"_"$expCov"_dir"
 		if [ -e $dirName"/contigs.fa" ]
 		then
@@ -38,6 +37,5 @@ do
 		    rm $dirName"/Sequences"
 		    rm $dirName"/Roadmaps"
 		fi
-    done
 done
 done
