@@ -6,6 +6,7 @@ $rootDir=$ARGV[0];
 
 opendir(DIR, $rootDir);
 @blatfiles = grep(/\.psl$/,readdir(DIR));
+@blastfiles = grep(/\.m8$/,readdir(DIR));
 closedir(DIR);
 
 if(scalar(@blatfiles)){
@@ -28,21 +29,43 @@ if(scalar(@blatfiles)){
        }
     }
     close(BLAT);
+}else{
+    if(scalar(@blastfiles)){
+	$blastFile=$blastfiles[0];
+open(BLAST,"<$rootDir/$blastFile") or die("can't find blast file");
+while(<BLAST>){
+        ($query,$lgth,$bit)=$_=~/^(\S+)\t\S+\t\S+\t(\d+).+\t\s?([0-9.]+)$/;
+        if($query ne $oq){
+            $winners{$query}=$bit;
+            $lengths{$query}=$lgth;
+            $ob=$bit;
+            $oq=$query;
+        }elsif($winners{$query}>0 && $bit>0.95*$ob){
+            $winners{$query}=0;
+        }
+}
+close(BLAST);
+    }
+}
 
+
+
+
+if(scalar(@blatfiles) || scalar(@blastfiles){
 #length of all decent blatted queries
-$blatLen=0;
+$alignLen=0;
 foreach $q(keys %lengths)
-{$blatLen+=$lengths{$q}}
+{$alignLen+=$lengths{$q}}
 
 #any queries that blatted well
-$blatWin=scalar(keys(%winners));
+$alignWin=scalar(keys(%winners));
 
-#find distinctive blat hits
+#find distinctive hits
 $uniqueHits=0;
 foreach $h(keys(%winners)){
     if($winners{$h}==1){$uniqueHits++}
 }
-}#if blatfile
+}#if blatfile or blastfile
 
 open(CONTIGS,"<$rootDir/contigs.fa");
 $totBP=0;$goodContigs=0;
@@ -86,5 +109,5 @@ print "totBP"."\t"."reads"."\t"."tiles"."\t"."goodContigs"."\t"."kmer"."\t"."cvC
 print "\t"."blatHit"."\t"."bpAligned"."\t"."uniqueHits" if (scalar(@blatfiles));
 print "\n";
 print "$totBP\t$reads\t$tiles\t$goodContigs\t$kmer\t$cvCut\t$expCov";
-print "\t$blatWin\t$blatLen\t$uniqueHits" if (scalar(@blatfiles));
+print "\t$alignWin\t$alignLen\t$uniqueHits" if (scalar(@blatfiles));
 print "\n";
