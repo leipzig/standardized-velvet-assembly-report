@@ -13,10 +13,14 @@ Edit permute.sh to your liking, paying particular attention to the kmer, cvCut, 
 To Run:
 1. perl fastaAllSize mysequences.fa > mysequences.stat
 2. ./permute.sh mysequences (leave out the .fa)
+
+If using reference genome, else skip to 6
 3. faToTwoBit myrefgenome.fa myrefgenome.2bit
 4. gfServer start localhost 9999 myrefgenome.2bit
 5. for f in out*dir; do if [ ! -e $f/contigsVsRef.psl ]; then echo $f; gfClient localhost 9999 ./ $f/contigs.fa $f/contigsVsRef.psl; fi; done
-6. for f in out*dir; do if [ ! -e $f/metadata.txt ]; then perl generateAssemblyStats.pl $f contigsVsRef.psl > $f/metadata.txt; fi; done
+
+
+6. for f in out*dir; do if [ ! -e $f/metadata.txt ]; then perl generateAssemblyStats.pl $f > $f/metadata.txt; fi; done
 7. for f in out*dir; do echo "groupDir<-\"$f\";statFile<-\"mysequences\";statTab<-\"$f/stats.txt\";metaTab<-\"$f/metadata.txt\";source(\"calculateStats.R\")" | R --no-save --quiet; done
 8. If you wish to skip the individual contig length histograms (much quicker)
      echo "assmName<-\"mysequences\";statFile<-\"mysequences\"; Sweave(\"shortReport.Rnw\",output=\"mysequences.tex\");" | R --no-save --quiet

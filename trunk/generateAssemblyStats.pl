@@ -51,7 +51,7 @@ close(BLAST);
 
 
 
-if(scalar(@blatfiles) || scalar(@blastfiles){
+if(scalar(@blatfiles) || scalar(@blastfiles)){
 #length of all decent blatted queries
 $alignLen=0;
 foreach $q(keys %lengths)
