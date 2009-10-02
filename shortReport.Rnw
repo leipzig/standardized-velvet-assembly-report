@@ -90,10 +90,14 @@ names(limitedTable)[which(names(limitedTable)=='totalCoverage')]<-'asmLg'
 names(limitedTable)[which(names(limitedTable)=='uniqueHits')]<-'uniHit'
 names(limitedTable)[which(names(limitedTable)=='rdUsagePc')]<-'rdPc'
 
-underTab<-limitedTable[limitedTable$kmer<=19,]
-overTab<-limitedTable[limitedTable$kmer>19,]
+#this can be useful for doing dozens of iterations where page space becomes an issue
+#underTab<-limitedTable[limitedTable$kmer<=19,]
+#overTab<-limitedTable[limitedTable$kmer>19,]
+
+underTab<-limitedTable
+
 myXtableOne<-xtable(underTab[order(underTab$kmer,underTab$cvCut,decreasing=FALSE),],type=tex,caption="Assembly Parameter Perumutations")
-myXtableTwo<-xtable(overTab[order(overTab$kmer,overTab$cvCut,decreasing=FALSE),],type=tex,caption="Assembly Parameter Perumutations")
+#myXtableTwo<-xtable(overTab[order(overTab$kmer,overTab$cvCut,decreasing=FALSE),],type=tex,caption="Assembly Parameter Perumutations")
 @ 
 
 \pagebreak
@@ -102,10 +106,12 @@ print(myXtableOne,include.rownames=FALSE, size="\\footnotesize")
 #floating.environment="sidewaystable")
 @
 
-\pagebreak
-<<tableTwo,results=tex,echo=FALSE>>=
-print(myXtableTwo,include.rownames=FALSE, size="\\footnotesize") 
-@ 
+#uncomment if you are using two tables because of space issues
+#\pagebreak
+#<<tableTwo,results=tex,echo=FALSE>>=
+#print(myXtableTwo,include.rownames=FALSE, size="\\footnotesize") 
+#@
+
 \pagebreak
 \section{Effect of kmer and cvCut on Assembly Profile}
 \subsection{Assembly coherency}
