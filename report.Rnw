@@ -77,6 +77,9 @@ limitedTable<-as.data.frame(myDataFrame[,c("kmer","cvCut","expCov","ctgs","total
 limitedTable$N50<-as.integer(limitedTable$N50)
 limitedTable$totalCoverage<-as.integer(limitedTable$totalCoverage)
 limitedTable$tiles<-as.integer(limitedTable$tiles)
+limitedTable$maxLgth<-as.integer(limitedTable$maxLgth)
+limitedTable$meanLgth<-as.integer(limitedTable$meanLgth)
+limitedTable$over1k<-as.integer(limitedTable$over1k)
 
 names(limitedTable)[which(names(limitedTable)=='expCov')]<-'exp'
 names(limitedTable)[which(names(limitedTable)=='medianLgth')]<-'med'
@@ -84,7 +87,7 @@ names(limitedTable)[which(names(limitedTable)=='meanLgth')]<-'mean'
 names(limitedTable)[which(names(limitedTable)=='maxLgth')]<-'max'
 names(limitedTable)[which(names(limitedTable)=='over1k')]<-'1k'
 names(limitedTable)[which(names(limitedTable)=='totalCoverage')]<-'asmLg'
-
+names(limitedTable)[which(names(limitedTable)=='rdUsagePc')]<-'rdPc'
 
 myXtable<-xtable(limitedTable[order(limitedTable$kmer,limitedTable$cvCut,decreasing=FALSE),],type=tex,caption="Assembly Parameter Perumutations")
 
