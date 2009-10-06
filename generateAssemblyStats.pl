@@ -5,8 +5,9 @@ use PerlIO::gzip;
 $rootDir=$ARGV[0];
 
 opendir(DIR, $rootDir);
-@blatfiles = grep(/\.psl$/,readdir(DIR));
-@blastfiles = grep(/\.m8$/,readdir(DIR));
+@allfiles=readdir(DIR);
+@blatfiles = grep(/\.psl$/,@allfiles);
+@blastfiles = grep(/m8$/,@allfiles);
 closedir(DIR);
 
 if(scalar(@blatfiles)){
