@@ -1,0 +1,252 @@
+\documentclass{article}
+\usepackage{longtable}
+\usepackage{rotating}
+\begin{document}
+
+\title{Standardized Velvet Assembly Report}
+\author{James Tisdall\\Jeremy Leipzig}
+
+\maketitle
+
+\tableofcontents
+\pagebreak
+\section{Assembly metadata}
+
+This is an assembly of \Sexpr{assmName}
+
+<<basicStuff,echo=FALSE>>=
+source("config.R")
+library(xtable)
+library(ggplot2)
+myBasic<-read.table(paste(statFile,".stat",sep=""),sep="\t",col.names=c("reads","size"))
+myBasic
+@
+
+\section{Optimal assembly parameter estimation}
+<<permuteSetup,echo=FALSE>>=
+
+load(paste(statFile,".frame.RData",sep=""))
+rootDir<-"."
+@
+This document is a reusable Sweave script which can be used to interpret Velvet assemblies.
+
+
+
+The kmer index and coverage cutoff (cvCut) parameters are user-specified in Velvet and largely determine the length, specificity, and total contig count.
+
+The expected coverage variable (expCov) also appears to affect contig count and assembly length but to a lesser extent. In particular, a higher expected coverage parameter "relaxes a constraint which allows more nodes to be flagged as unique." This can create misassemblies.
+
+The summary table that appears at the end of this document attempts to quantify the effects on assembly quality for several combinations of kmer and cvCut. The columns are as follows:
+
+kmer - kmer index
+
+cvCut - coverage cutoff, measured in kmers coverage. This threshold specifies how many read k-mers must overlap for each contig kmer. The number of kmers per read is a function of read length L and k-mer length K (L-K+1). A 32bp read contains 12 21-mers. In that instance, a kmer coverage of 3.9x will correspond to a conventional X-coverage of 10x.
+
+ctgs - number of contigs
+
+asmLg - total length of all contigs (in bp)
+
+mean - mean length of the contigs (in bp)
+
+max - length of the longest contig (in bp)
+
+1k - number of contigs over 1kbp
+
+N50- the length of the shortest contig in an assembly such that the sum of contigs of equal length or longer is at least 50\% of the total length of all contigs.
+
+tiles - number of reads that are used in an assembly
+
+rdPc - percentage of input reads used in the assembly
+
+alnPc - percentage of assembly sequence that align to a \Sexpr{refName} transcript using Blat with default parameters
+
+hit - number of contigs that aligned 90\% of their sequence to a \Sexpr{refName} transcript
+
+
+
+
+\pagebreak
+
+<<tableSetup,results=tex,echo=FALSE>>=
+
+if(exists("cvLimits") & length(cvLimits)>0){
+myDataFrame<-myDataFrame[myDataFrame$cvCut %in% cvLimits,]
+}
+if(exists("kmerLimits") & length(kmerLimits)>0){
+myDataFrame<-myDataFrame[myDataFrame$kmer %in% kmerLimits,]
+}
+
+
+myDataFrame["alignPerc"]<-myDataFrame['bpAligned']*100/myDataFrame['totBP']
+myDataFrame$rdUsagePc<-(myDataFrame$tiles/myDataFrame$reads)*100
+limitedTable<-as.data.frame(myDataFrame[,c("kmer","cvCut","expCov","ctgs","totalCoverage","N50","meanLgth","over1k","maxLgth","tiles","rdUsagePc",
+                                           "bpAligned","alignPerc","blatHit")])
+limitedTable$N50<-as.integer(limitedTable$N50)
+limitedTable$totalCoverage<-as.integer(limitedTable$totalCoverage)
+limitedTable$tiles<-as.integer(limitedTable$tiles)
+
+names(limitedTable)[which(names(limitedTable)=='expCov')]<-'exp'
+names(limitedTable)[which(names(limitedTable)=='medianLgth')]<-'med'
+names(limitedTable)[which(names(limitedTable)=='meanLgth')]<-'mean'
+names(limitedTable)[which(names(limitedTable)=='maxLgth')]<-'max'
+names(limitedTable)[which(names(limitedTable)=='over1k')]<-'1k'
+names(limitedTable)[which(names(limitedTable)=='totalCoverage')]<-'asmLg'
+names(limitedTable)[which(names(limitedTable)=='uniqueHits')]<-'uniHit'
+
+myXtable<-xtable(limitedTable[order(limitedTable$kmer,limitedTable$cvCut,decreasing=FALSE),],type=tex,caption="Assembly Parameter Perumutations")
+
+print(myXtable,include.rownames=FALSE,floating.environment="sidewaystable")
+@
+\pagebreak
+
+\section{Effect of kmer and cvCut on Assembly Profile}
+\subsection{Assembly coherency}
+The following scatterplot illustrates the effect of these variables on N50 and assembly length.
+N50 refers to the length of the shortest contig in an assembly such that the sum of contigs of equal length or longer is at least 50\% of the total length of all contigs.
+
+We can plot this to show the effect of kmer value (as progressively larger points) and coverage cutoff (strata connected by lines)
+on N50 and assembly length:
+
+<<plotCov,fig=TRUE,echo=FALSE>>=
+kmerDotSizes<-seq(1:length(levels(as.factor(myDataFrame$kmer))))*3
+p<-ggplot(myDataFrame[order(myDataFrame$cvCut),],aes(N50,totalCoverage))+
+geom_point(aes(size=as.factor(kmer))) +
+aes(colour=as.factor(cvCut)) +
+scale_size_manual(name="kmer",value = kmerDotSizes) +
+geom_line() +
+scale_colour_discrete("cvCut") +
+xlab("N50 (bp)") +
+ylab("Assembly Length (bp)") +
+opts(title="Assm. Parameters (kmer/cvCut) vs. Indicators(lgth/N50)")
+print(p)
+@
+
+\pagebreak
+Contig count can be misleading as contigs that are very short (less than a couple reads long) often dominate an assembly.
+For the purposes of this plot we disregard contigs less than 2 kmers in length
+
+<<plotCon,fig=TRUE,echo=FALSE>>=
+p<-ggplot(myDataFrame[order(myDataFrame$cvCut),],aes(N50,goodContigs)) +
+geom_point(aes(size=as.factor(kmer))) +
+aes(colour=as.factor(cvCut)) +
+scale_size_manual(name="kmer",value = kmerDotSizes) + 
+geom_line() +
+scale_colour_discrete("cvCut") +
+xlab("N50 (bp)") +
+ylab("Num Contigs > 2 kmers long") +
+opts(title="Assm. Parameters (kmer/cvCut) vs. Assm. Indicators(Ctg Count/N50)")
+print(p)
+@
+
+\pagebreak
+\subsection{Read usage}
+The fraction of reads, aka tiles, of the \Sexpr{myDataFrame[1,"reads"]} total reads used in each assembly may vary as
+kmer and cvCut are adjusted. An increase in read recruitment that is positively correlated with more stringent parameters
+may indicate the presence of missassemblies at lower stringencies.
+
+<<plotMeTiles,fig=TRUE,echo=FALSE>>=
+ylim<-c(0,100)
+p<-ggplot(myDataFrame[order(myDataFrame$cvCut),],aes(cvCut,rdUsagePc)) +
+geom_point(aes(size=as.factor(kmer),colour=as.factor(kmer)))  + 
+scale_size_manual(name="kmer",value = kmerDotSizes) +
+scale_colour_discrete("kmer") +
+xlab("Coverage cutoff") +
+ylab("Percent Read Usage")+
+scale_y_continuous(limits=ylim)+
+opts(title="Assm. Parameters (kmer/cvCut) vs. Percent Read Usage")
+print(p)
+@
+
+\pagebreak
+\section{Contig size plots}
+
+Contig sizes for each assembly are shown in the following histograms.
+\subsection{Linear scale histogram}
+A linear histogram reveals a very heavy proportion of short contigs for all assemblies and a long but significant tail.
+
+<<histoSetup,echo=FALSE>>=
+statsTab<-list()
+histoLimits<-read.table("histoLimits.cfg",header=TRUE)
+myDataFrame<-myDataFrame[order(myDataFrame$kmer,myDataFrame$cvCut),]
+for(i in 1:nrow(myDataFrame)){
+ tmpTab<-read.table(paste(myDataFrame$groupDir[i],'/stats.txt',sep=''),header=TRUE)
+ tmpTab$bpLgth<-tmpTab$lgth+myDataFrame$kmer[i]-1
+ statsTab[[i]]<-tmpTab[tmpTab$lgth>0,]
+}
+isLogX<-FALSE
+isDens<-FALSE
+xlab<-"contig size (bp)"
+ylab<-"cnt"
+xlim<-c(0,histoLimits["linear","xlim"]) 
+ylim<-c(0,histoLimits["linear","ylim"])
+
+maxHeight<-18000
+
+hForm<-function(i){
+  qplot(bpLgth,data=statsTab[[i]], geom="histogram",binwidth=histoLimits["linear","binwidth"])+scale_y_continuous(limits=ylim,ylab)+scale_x_continuous(limits=xlim,xlab)
+}
+@
+<<histos,fig=TRUE,echo=FALSE>>=
+
+plotsPerRow<-3
+grid.newpage()
+pushViewport(viewport(layout=grid.layout(ceiling(nrow(myDataFrame)/plotsPerRow),plotsPerRow)))
+modo<-function(i){if(i%%plotsPerRow==0){plotsPerRow}else{i%%plotsPerRow}}
+
+ vplayout <- function(x, y){viewport(layout.pos.row = x, layout.pos.col = y)}
+for(i in 1:nrow(myDataFrame)){
+  setName<-paste("kmer",myDataFrame$kmer[i],"/cvCut",myDataFrame$cvCut[i],sep="")
+  h<-hForm(i)+opts(title=setName,plot.title=theme_text(size=8))+opts(axis.text.y=theme_blank(),axis.text.x=theme_text(size=6),axis.title.x=theme_text(size=6),axis.title.y=theme_text(size=6))+opts(plot.margin = unit(rep(0, 4), "lines"))
+  
+  
+  nFifty<-myDataFrame$N50[[i]]
+  if(isLogX==TRUE){
+    h<-h+geom_vline(xintercept=log10(nFifty),colour="red",size=.5)
+  }else{
+    h<-h+geom_vline(xintercept=nFifty,colour="red",size=.1) 
+  }
+    print(h, vp = vplayout(ceiling(i/plotsPerRow),modo(i)))
+}
+@
+
+\pagebreak
+\subsection{Log scale histogram}
+We can apply a log scale to the contig size in order to emphasize the tail end of the distribution.
+
+<<logHisto,fig=TRUE,echo=FALSE>>=
+isLogX<-TRUE
+isDens<-FALSE
+xlab<-"log10 contig size"
+xlim<-c(1,histoLimits["log","xlim"]) 
+ylim<-c(0,histoLimits["log","ylim"])
+maxHeight<-25000
+
+hForm<-function(i){
+  qplot(log10(bpLgth),data=statsTab[[i]], geom="histogram",binwidth=histoLimits["linear","binwidth"])+scale_y_continuous(limits=ylim)+scale_x_continuous(limits = xlim,xlab)
+}
+<<histos>>
+@
+
+\pagebreak
+\subsection{Kernel density}
+This kernel density plot of log contig size distribution by
+controlling for overall contig count.
+
+<<kdensity,fig=TRUE,echo=FALSE>>=
+ isLogX<-TRUE
+ isDens<-TRUE
+ xlab<-"log10 contig size"
+ylab<-"density"
+xlim<-c(1,histoLimits["density","xlim"]) 
+ylim<-c(0,histoLimits["density","ylim"])
+maxHeight<-1.2
+
+hForm<-function(i){
+  qplot(log10(bpLgth),data=statsTab[[i]], geom="density")+scale_y_continuous(limits=ylim,ylab)+scale_x_continuous(limits=xlim,xlab)
+}
+<<histos>>
+@
+
+
+
+\end{document}
