@@ -106,8 +106,8 @@ close(ASM);
 $tiles=scalar keys %readSrc;
 
 print "totBP"."\t"."reads"."\t"."tiles"."\t"."goodContigs"."\t"."kmer"."\t"."cvCut"."\t"."expCov";
-print "\t"."blatHit"."\t"."bpAligned"."\t"."uniqueHits" if (scalar(@blatfiles));
+print "\t"."blatHit"."\t"."bpAligned"."\t"."uniqueHits" if(scalar(@blatfiles) || scalar(@blastfiles));
 print "\n";
 print "$totBP\t$reads\t$tiles\t$goodContigs\t$kmer\t$cvCut\t$expCov";
-print "\t$alignWin\t$alignLen\t$uniqueHits" if (scalar(@blatfiles));
+print "\t$alignWin\t$alignLen\t$uniqueHits" if(scalar(@blatfiles) || scalar(@blastfiles));
 print "\n";

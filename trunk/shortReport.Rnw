@@ -71,12 +71,10 @@ myDataFrame<-myDataFrame[myDataFrame$kmer %in% kmerLimits,]
 
 myDataFrame$rdUsagePc<-(myDataFrame$tiles/myDataFrame$reads)*100
 limitedTable<-as.data.frame(myDataFrame[,c("kmer","cvCut","expCov","ctgs","totalCoverage","N50","meanLgth","over1k","maxLgth","rdUsagePc")])
-if("bpAligned" %in% colnames(myDataFrame)){limitedTable["alignPerc"]<-myDataFrame['bpAligned']*100/myDataFrame['totBP']
-                                         limitedTable["blatHit"]<-myDataFrame$blatHit
-                                       }
 
 limitedTable$N50<-as.integer(limitedTable$N50)
 limitedTable$totalCoverage<-as.integer(limitedTable$totalCoverage)
+limitedTable$tiles<-as.integer(limitedTable$tiles)
 limitedTable$maxLgth<-as.integer(limitedTable$maxLgth)
 limitedTable$meanLgth<-as.integer(limitedTable$meanLgth)
 limitedTable$over1k<-as.integer(limitedTable$over1k)
@@ -87,7 +85,6 @@ names(limitedTable)[which(names(limitedTable)=='meanLgth')]<-'mean'
 names(limitedTable)[which(names(limitedTable)=='maxLgth')]<-'max'
 names(limitedTable)[which(names(limitedTable)=='over1k')]<-'1k'
 names(limitedTable)[which(names(limitedTable)=='totalCoverage')]<-'asmLg'
-names(limitedTable)[which(names(limitedTable)=='uniqueHits')]<-'uniHit'
 names(limitedTable)[which(names(limitedTable)=='rdUsagePc')]<-'rdPc'
 
 #this can be useful for doing dozens of iterations where page space becomes an issue
