@@ -21,7 +21,7 @@ If using Blat:
 5. for f in out*dir; do if [ ! -e $f/contigsVsRef.psl ]; then echo $f; gfClient localhost 9999 ./ $f/contigs.fa $f/contigsVsRef.psl; fi; done
 If Using BLAST:
 3. formatdb -i myrefgenome -p F
-4. for f in out*dir*; do blastall -i $f/contigs.fa -p blastn -d myrefgenome -m 8 -o $f/contigsVsRef.m8; done
+4. for f in out*dir; do if [ ! -e $f/contigsVsRef.m8 ]; then echo $f; blastall -i $f/contigs.fa -p blastn -d myrefgenome -m 8 -o $f/contigsVsRef.m8; fi; done
 
 
 6. for f in out*dir; do if [ ! -e $f/metadata.txt ]; then perl generateAssemblyStats.pl $f > $f/metadata.txt; fi; done
