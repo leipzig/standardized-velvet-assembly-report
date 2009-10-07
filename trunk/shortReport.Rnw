@@ -103,11 +103,11 @@ print(myXtableOne,include.rownames=FALSE, size="\\footnotesize")
 #floating.environment="sidewaystable")
 @
 
-#uncomment if you are using two tables because of space issues
-#\pagebreak
-#<<tableTwo,results=tex,echo=FALSE>>=
-#print(myXtableTwo,include.rownames=FALSE, size="\\footnotesize") 
-#@
+%uncomment if you are using two tables because of space issues
+%\pagebreak
+%<<tableTwo,results=tex,echo=FALSE>>=
+%print(myXtableTwo,include.rownames=FALSE, size="\\footnotesize") 
+%@
 
 \pagebreak
 \section{Effect of kmer and cvCut on Assembly Profile}
