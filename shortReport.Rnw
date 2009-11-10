@@ -56,8 +56,6 @@ max - length of the longest contig (in bp)
 
 N50- the length of the shortest contig in an assembly such that the sum of contigs of equal length or longer is at least 50\% of the total length of all contigs.
 
-tiles - number of reads that are used in an assembly
-
 rdPc - percentage of input reads used in the assembly
 
 
@@ -74,7 +72,6 @@ limitedTable<-as.data.frame(myDataFrame[,c("kmer","cvCut","expCov","ctgs","total
 
 limitedTable$N50<-as.integer(limitedTable$N50)
 limitedTable$totalCoverage<-as.integer(limitedTable$totalCoverage)
-limitedTable$tiles<-as.integer(limitedTable$tiles)
 limitedTable$maxLgth<-as.integer(limitedTable$maxLgth)
 limitedTable$meanLgth<-as.integer(limitedTable$meanLgth)
 limitedTable$over1k<-as.integer(limitedTable$over1k)
