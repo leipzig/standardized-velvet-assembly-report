@@ -14,4 +14,4 @@ You can't add kmer-1 to the kmer-N50 to arrive at the bp-N50. The math doesn't w
 
 == I calculated the N50 from my contigs.fa file and got a different answer from kmer-N50 or your bp-N50. What the hell is wrong with this? ==
 
-The contigs.fa contains by default only those contigs longer than 2kmer-1. Contigs shorter than that are considered spurious. So the N50 of sequences in your contigs.fa file will be considerably higher than that calculated from using the stats.txt file.
+The contigs.fa contains by default only those contigs longer than 2kmers. Contigs shorter than that are considered spurious. So the N50 of sequences in your contigs.fa file will be considerably higher than that calculated from using the stats.txt file.
