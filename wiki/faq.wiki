@@ -1,14 +1,14 @@
 #summary Frequently Asked Questions
-== Where can I find more information on N50? ==
+== Where can I find more information on N50 length? ==
 This, my most popular blog entry ever, discusses N50 in detail:
 
 http://jermdemo.blogspot.com/2008/11/calculating-n50-from-velvet-output.html
 
 == Why is the N50 reported in your report different from the one I see in the Log file produced by Velvet ==
 
-The N50 in the Log file is in kmer units. The N50 in my report is in bp.
+The N50 in the Log file is in kmer units. The N50 in the report is in bp.
 
-== I added kmer-1 to the N50 in the Log file and did not arrive at your number. What is going on here? ==
+== I added kmer-1 to the N50 in the Log file and did not arrive at the number in your report. What is going on here? ==
 
 You can't add kmer-1 to the kmer-N50 to arrive at the bp-N50. The math doesn't work like that. You need to convert all the contig lengths to bp and then calculate N50.
 
