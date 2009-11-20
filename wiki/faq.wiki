@@ -1,0 +1,16 @@
+#summary Frequently Asked Questions
+= Where can I find more information on N50? =
+This, my most popular blog entry ever, discusses N50 in detail:
+http://jermdemo.blogspot.com/2008/11/calculating-n50-from-velvet-output.html
+
+= Why is the N50 reported in your report different from the one I see in the Log file produced by Velvet =
+
+The N50 in the Log file is in kmer units. The N50 in my report is in bp.
+
+= I added kmer-1 to the N50 in the Log file and did not arrive at your number. What is going on here? =
+
+You can't add kmer-1 to the kmer-N50 to arrive at the bp-N50. The math doesn't work like that. You need to convert all the contig lengths to bp and then calculate N50.
+
+= I calculated the N50 from my contigs.fa file and got a different answer from kmer-N50 or your bp-N50. What the hell is wrong with this? =
+
+The contigs.fa contains by default only those contigs longer than 2kmer-1. Contigs shorter than that are considered spurious. So the N50 of sequences in your contigs.fa file will be considerably higher than that calculated from using the stats.txt file.
