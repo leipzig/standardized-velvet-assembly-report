@@ -57,7 +57,10 @@ do
 			echo "velvetg did not run normally"
                         exit
                     fi
-		    gzip $dirName"/velvet_asm.afg" &
+		    if [ -e $dirName/"velvet_asm.afg" ]
+		    then
+			gzip $dirName"/velvet_asm.afg" &
+		    fi
 		    rm $dirName"/LastGraph"
 		    rm $dirName"/Graph2"
 		    rm $dirName"/PreGraph"
