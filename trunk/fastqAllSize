@@ -1,0 +1,30 @@
+#!/usr/bin/perl
+#calculate number of sequences and total base pairs from FASTQ file
+while (<>) {
+    chomp;
+    if (/^@/) {
+        $tot++;
+        $_ = <>;    #seqline
+        unless (/^[ACTGN]+$/) {
+            die( "you have some weird nucleotides:" . $_ . "\n" );
+        }
+	chomp;
+        $sum += length($_);
+
+        #second identifer and qual line
+        $_ = <>;
+        if (/^[ACTGN]+$/) {
+            print STDERR
+"Warning: you have a line that looks like sequence but is not preceeded by a @ defline"
+              . $_ . "\n";
+        }
+        $_ = <>;
+        if (/^[ACTGN]+$/) {
+            print STDERR
+"Warning: you have a line that looks like sequence but is not preceeded by a @ defline"
+              . $_ . "\n";
+        }
+    }
+}
+print $tot. " seqs\t" . $sum . " bp\n";
+
