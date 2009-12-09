@@ -1,3 +1,4 @@
 #!/usr/bin/perl
+print "sequences\tbasePairs\n";
 while(<>){if(/>/){$tot++}else{chomp;$sum+=length($_);}}
-print $tot." seqs\t".$sum." bp\n";
+print $tot."\t".$sum."\n";
