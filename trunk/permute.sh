@@ -6,13 +6,13 @@ then
     exit
 fi
 #try to guess the correct extension from ls
-ext=$(ls $1* | grep -oE -m1 '(.fa|.fq|.fasta|.fastq|eland|gerald)(.gz)?$')
+ext=$(ls $1* | grep -oE -m1 '(.fa|.fq|.fasta|.fastq|.eland|.gerald)(.gz)?$')
 if [ ! -e "$1""$ext" ]
 then
     echo "Cannot find $1$ext"
     exit
 fi
-longExt="`echo $ext | sed -e 's/.fa\(sta\)*/.fasta/;s/.fq/.fastq/;'`"
+longExt="`echo $ext | sed -e 's/\.fa\(sta\)*/fasta/;s/\.fq/fastq/;s/^\.//;'`"
 
 if [ ! -e $1".stat" ]
 then
@@ -24,7 +24,7 @@ then
     fi
     exit
 fi
-for kmer in 31 29 27
+for kmer in 31 27 23 21
 do
     if [ -e "out_"$1"_"$kmer"/Roadmaps" ]
     then
@@ -33,7 +33,7 @@ do
 	echo "running velveth"
 	velveth "out_"$1"_"$kmer $kmer -$longExt -shortPaired $1$ext
     fi
-    for cvCut in 10 6 4 3 2
+    for cvCut in 12 10 6 4 3 2
     do
     expCov=$((2*$cvCut))
                 dirName="out_"$1"_"$kmer"_"$cvCut"_"$expCov"_dir"
@@ -57,10 +57,7 @@ do
 			echo "velvetg did not run normally"
                         exit
                     fi
-		    if [ -e $dirName/"velvet_asm.afg" ]
-		    then
-			gzip $dirName"/velvet_asm.afg" &
-		    fi
+		    gzip $dirName"/velvet_asm.afg" &
 		    rm $dirName"/LastGraph"
 		    rm $dirName"/Graph2"
 		    rm $dirName"/PreGraph"
