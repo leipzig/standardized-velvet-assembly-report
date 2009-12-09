@@ -11,7 +11,7 @@ Optional:
 Edit permute.sh to your liking, paying particular attention to the kmer, cvCut, expCov, and other flags
 
 To Run:
-1. perl fastaAllSize mysequences.fa > mysequences.stat
+1. perl fastaAllSize mysequences.fa > mysequences.stat or gunzip -c mysequences.fa.gz | fastaAllSize > mysequences.stat. Substitute fastqAllSize for fastq files.
 2. ./permute.sh mysequences (leave out the .fa)
 
 If NOT using a reference genome skip to 6
