@@ -24,7 +24,7 @@ then
     fi
     exit
 fi
-for kmer in 35 31 27 23
+for kmer in 31 29 27
 do
     if [ -e "out_"$1"_"$kmer"/Roadmaps" ]
     then
