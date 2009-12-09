@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 #calculate number of sequences and total base pairs from FASTQ file
+print "sequences\tbasePairs\n";
+
 while (<>) {
     chomp;
     if (/^@/) {
@@ -26,5 +28,4 @@ while (<>) {
         }
     }
 }
-print $tot. " seqs\t" . $sum . " bp\n";
-
+print $tot."\t".$sum."\n";
