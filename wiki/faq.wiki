@@ -18,4 +18,4 @@ The contigs.fa contains by default only those contigs longer than 2kmers. Contig
 
 == Why do I get different read usage numbers when I specify -useamos in generateAssemblyStats.pl? ==
 
-I think this is usually a side effect of allowing N's in your input sequences. Velvet will convert these to A's. If there is another read with a real A at that position Velvet will consider the N-posing-as-A read as used and the A read as unused. The point being you should just leave out or trim sequences with Ns.
+I think this is usually a side effect of allowing N's in your input sequences. Velvet will convert these to A's. If there is another read with a real A at that position Velvet will consider the N-posing-as-A read as used and the honest-A read as unused. The point being you should just leave out or trim sequences with Ns.
