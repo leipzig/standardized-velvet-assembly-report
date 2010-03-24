@@ -23,3 +23,9 @@ I think this is usually a side effect of allowing N's in your input sequences. V
 == I don't understand what should I use as input - contigs or reads? ==
 
 Use quality trimmed reads as input.
+
+== What should I use to quality trim my reads? ==
+Nikhil Joshi's Trim will handle soft trimming with pair mate widows
+http://wiki.bioinformatics.ucdavis.edu/index.php/Trim.pl
+Joseph Fass's TrimBWAStyle is a slightly different algorithm
+http://wiki.bioinformatics.ucdavis.edu/index.php/TrimBWAstyle.pl
