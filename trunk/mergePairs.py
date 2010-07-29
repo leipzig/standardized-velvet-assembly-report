@@ -1,11 +1,13 @@
+#!/usr/bin/python
+#mergePairs.py
+#Jeremy Leipzig
+#merge overlapping paired end reads to improve assemblies
+
 from optparse import OptionParser
 from Bio.SeqIO.QualityIO import FastqGeneralIterator
 from Bio.Seq import Seq
 from Bio import pairwise2
 import itertools
-#from Bio import SubsMat
-#from Bio.SubsMat import MatrixInfo
-#from Bio.pairwise2 import dictionary_match
 from Bio.SeqRecord import SeqRecord
 from Bio.Alphabet import IUPAC
 from Bio import SeqIO
@@ -64,8 +66,10 @@ def merge_pairs(seq1, id1, q1, seq2, id2, q2):
 				for seq_a, seq_b, score, start, end in alignments:
 					overlap=len(seq1)+len(seq2)-(end-start)
 					endgaps=(end-start)-overlap
-					#print score, overlap*(identity/100.0)
-					if score>((options.identity/100.0)*overlap):
+					#e.g.overlap if 5 with 1 mismatch will be 80% id but score a 3
+					# 3>=5-2*(1-(80/100))
+					# 3>=5-5*2*.2
+					if score>=overlap-overlap*2*(1-(options.identity/100.0)):
 						#print seq_a
 						#print seq_b
 						apos=0
@@ -107,14 +111,14 @@ def merge_pairs(seq1, id1, q1, seq2, id2, q2):
 										qual+=q2[bpos]
 									apos+=1
 									bpos+=1
-						assert(length(seq)>0)
-					        #print id1,len(seq1),len(seq2),apos,bpos
-						#http://biostar.stackexchange.com/questions/967/how-do-i-create-a-seqrecord-in-biopython
-						printMerged(id1,seq,qual)
-						printPreserved(id1,seq1,q1,id2,seq2,q2)
-						assert(apos==len(seq1))
-						assert(bpos==len(seq2))
-						merged+=1
+						if(len(seq)>0):
+							#print id1,len(seq1),len(seq2),apos,bpos
+							#http://biostar.stackexchange.com/questions/967/how-do-i-create-a-seqrecord-in-biopython
+							printMerged(id1,seq,qual)
+							printPreserved(id1,seq1,q1,id2,seq2,q2)
+							assert(apos==len(seq1))
+							assert(bpos==len(seq2))
+							merged+=1
 					else:
 						printUnmerged(id1,seq1,q1,id2,seq2,q2)
 					#print score + "is > " + identity + "of " + overlap
