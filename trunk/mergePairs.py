@@ -51,14 +51,14 @@ def merge_pairs(seq1, id1, q1, seq2, id2, q2):
 		exact_pos = seq1.find(seq2[0:options.minimum])
 		if exact_pos >= 0:
 				seq2_region = seq2[0:len(seq2)-(len(seq1)-exact_pos)]
-
+				#this matrix is necessary otherwise N-N alignments are considered matches
 				jerm={('A', 'A'): 1, ('A', 'C'): -1, ('A', 'T'): -1, ('A', 'G'): -1,
 				      ('G', 'G'): 1, ('G', 'C'): -1, ('G', 'T'): -1,
 				      ('C', 'C'): 1, ('C', 'T'): -1, 
 				      ('T', 'T'): 1,
 				      ('N','N'): -1,('N','A'): -1,('N','C'): -1,('N','G'): -1,('N','T'): -1}
 
-
+                                #+1/-1 scoring is somehow necessary, a 1/0 scoring tends to produce awful end-alignments
 				alignments = pairwise2.align.globalds(seq1,seq2,jerm,-1,-1,penalize_end_gaps=False,one_alignment_only=True)
 				#print len(alignments)
 				if len(alignments) < 1:
@@ -66,9 +66,10 @@ def merge_pairs(seq1, id1, q1, seq2, id2, q2):
 				for seq_a, seq_b, score, start, end in alignments:
 					overlap=len(seq1)+len(seq2)-(end-start)
 					endgaps=(end-start)-overlap
-					#e.g.overlap if 5 with 1 mismatch will be 80% id but score a 3
-					# 3>=5-2*(1-(80/100))
+					#e.g.with this matrix an overlap of 5 with 1 mismatch will be 80%ID but score a 3
+					# 3>=5-5*2*(1-(80/100))
 					# 3>=5-5*2*.2
+					# 3>=5-2 ok
 					if score>=overlap-overlap*2*(1-(options.identity/100.0)):
 						#print seq_a
 						#print seq_b
