@@ -129,19 +129,19 @@ def merge_pairs(seq1, id1, q1, seq2, id2, q2):
 def printUnmerged(id1,seq1,q1,id2,seq2,q2):
 		fastq_string = "@%s\n%s\n+\n%s\n" % (id1, seq1, q1)
 		record = SeqIO.read(StringIO(fastq_string), formats[options.intypenum])
-		unmerged_handle.write(str(record.format(formats[options.outtypenum])+'\n'))
+		unmerged_handle.write(str(record.format(formats[options.outtypenum])))
 		fastq_string = "@%s\n%s\n+\n%s\n" % (id2, seq2, q2)
 		record = SeqIO.read(StringIO(fastq_string), formats[options.intypenum])
-		unmerged_handle.write(str(record.format(formats[options.outtypenum])+'\n'))
+		unmerged_handle.write(str(record.format(formats[options.outtypenum])))
 
 def printPreserved(id1,seq1,q1,id2,seq2,q2):
 		fastq_string = "@%s\n%s\n+\n%s\n" % (id1, seq1, q1)
 		record = SeqIO.read(StringIO(fastq_string), formats[options.intypenum])
-		preserve_handle.write(str(record.format(formats[options.outtypenum])+'\n'))
+		preserve_handle.write(str(record.format(formats[options.outtypenum])))
 		fastq_string = "@%s\n%s\n+\n%s\n" % (id2, seq2, q2)
 		record = SeqIO.read(StringIO(fastq_string), formats[options.intypenum])
-		preserve_handle.write(str(record.format(formats[options.outtypenum])+'\n'))
-
+		preserve_handle.write(str(record.format(formats[options.outtypenum])))
+		
 def printMerged(id1,seq,qual):
 		fastq_string = "@%s\n%s\n+\n%s\n" % (id1, seq, qual)
 		#print formats[options.intypenum] + " to " + formats[options.outtypenum]
