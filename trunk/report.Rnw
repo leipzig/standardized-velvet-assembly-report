@@ -89,7 +89,7 @@ names(limitedTable)[which(names(limitedTable)=='over1k')]<-'1k'
 names(limitedTable)[which(names(limitedTable)=='totalCoverage')]<-'asmLg'
 names(limitedTable)[which(names(limitedTable)=='rdUsagePc')]<-'rdPc'
 
-myXtable<-xtable(limitedTable[order(limitedTable$kmer,limitedTable$cvCut,decreasing=FALSE),],type=tex,caption="Assembly Parameter Perumutations")
+myXtable<-xtable(limitedTable[order(limitedTable$kmer,limitedTable$cvCut,decreasing=FALSE),],type=tex,caption="Assembly Parameter Permutations")
 
 print(myXtable,include.rownames=FALSE,floating.environment="sidewaystable")
 @
@@ -138,7 +138,7 @@ print(p)
 \subsection{Read usage}
 The fraction of reads, aka tiles, of the \Sexpr{myDataFrame[1,"reads"]} total reads used in each assembly may vary as
 kmer and cvCut are adjusted. An increase in read recruitment that is positively correlated with more stringent parameters
-may indicate the presence of missassemblies at lower stringencies.
+may indicate the presence of misassemblies at lower stringencies.
 
 <<plotMeTiles,fig=TRUE,echo=FALSE>>=
 ylim<-c(0,100)
