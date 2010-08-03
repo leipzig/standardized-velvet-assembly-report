@@ -90,8 +90,8 @@ names(limitedTable)[which(names(limitedTable)=='rdUsagePc')]<-'rdPc'
 
 underTab<-limitedTable
 
-myXtableOne<-xtable(underTab[order(underTab$kmer,underTab$cvCut,decreasing=FALSE),],type=tex,caption="Assembly Parameter Perumutations")
-#myXtableTwo<-xtable(overTab[order(overTab$kmer,overTab$cvCut,decreasing=FALSE),],type=tex,caption="Assembly Parameter Perumutations")
+myXtableOne<-xtable(underTab[order(underTab$kmer,underTab$cvCut,decreasing=FALSE),],type=tex,caption="Assembly Parameter Permutations")
+#myXtableTwo<-xtable(overTab[order(overTab$kmer,overTab$cvCut,decreasing=FALSE),],type=tex,caption="Assembly Parameter Permutations")
 @ 
 
 \pagebreak
@@ -150,7 +150,7 @@ print(p)
 \subsection{Read usage}
 The fraction of reads, aka tiles, of the \Sexpr{myDataFrame[1,"reads"]} total reads used in each assembly may vary as
 kmer and cvCut are adjusted. An increase in read recruitment that is positively correlated with more stringent parameters
-may indicate the presence of missassemblies at lower stringencies.
+may indicate the presence of misassemblies at lower stringencies.
 
 <<plotMeTiles,fig=TRUE,echo=FALSE>>=
 ylim<-c(0,100)
