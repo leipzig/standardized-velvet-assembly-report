@@ -4,7 +4,7 @@
 \begin{document}
 
 \title{Standardized Velvet Assembly Report}
-\author{James Tisdall\\Jeremy Leipzig}
+\author{Jeremy Leipzig}
 
 \maketitle
 
@@ -18,6 +18,7 @@ This is an assembly of \Sexpr{assmName}
 source("config.R")
 library(xtable)
 library(ggplot2)
+library(grid)
 myBasic<-read.table(paste(statFile,".stat",sep=""),sep="\t",col.names=c("reads","size"))
 myBasic
 @
@@ -108,7 +109,7 @@ kmerDotSizes<-seq(1:length(levels(as.factor(myDataFrame$kmer))))*3
 p<-ggplot(myDataFrame[order(myDataFrame$cvCut),],aes(N50,totalCoverage))+
 geom_point(aes(size=as.factor(kmer))) +
 aes(colour=as.factor(cvCut)) +
-scale_size_manual(name="kmer",value = kmerDotSizes) +
+scale_size_manual(name="kmer",values = kmerDotSizes) +
 geom_line() +
 scale_colour_discrete("cvCut") +
 xlab("N50 (bp)") +
@@ -125,7 +126,7 @@ For the purposes of this plot we disregard contigs less than 2 kmers in length
 p<-ggplot(myDataFrame[order(myDataFrame$cvCut),],aes(N50,goodContigs)) +
 geom_point(aes(size=as.factor(kmer))) +
 aes(colour=as.factor(cvCut)) +
-scale_size_manual(name="kmer",value = kmerDotSizes) + 
+scale_size_manual(name="kmer",values = kmerDotSizes) + 
 geom_line() +
 scale_colour_discrete("cvCut") +
 xlab("N50 (bp)") +
@@ -144,7 +145,7 @@ may indicate the presence of misassemblies at lower stringencies.
 ylim<-c(0,100)
 p<-ggplot(myDataFrame[order(myDataFrame$cvCut),],aes(cvCut,rdUsagePc)) +
 geom_point(aes(size=as.factor(kmer),colour=as.factor(kmer)))  + 
-scale_size_manual(name="kmer",value = kmerDotSizes) +
+scale_size_manual(name="kmer",values = kmerDotSizes) +
 scale_colour_discrete("kmer") +
 xlab("Coverage cutoff") +
 ylab("Percent Read Usage")+
