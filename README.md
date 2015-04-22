@@ -1,12 +1,12 @@
 Requirements:
--velvet (velveth velvetg should be in your PATH)
--R (with Sweave)
--pdflatex (usually part of TeTeX)
--ggplot2 (from R prompt type install.packages("ggplot2","proto","xtable"))
--Perl
+- velvet (velveth velvetg should be in your PATH)
+- R (with Sweave)
+- pdflatex (usually part of TeTeX)
+- ggplot2 (from R prompt type install.packages("ggplot2","proto","xtable"))
+- Perl
 
 Optional:
--BLAT or BLAST (to generate alignments against a reference genome). If using BLAT, add faToTwoBit,gfClient,gfServer to your PATH. If using BLAST, add blastall and formatdb.
+- BLAT or BLAST (to generate alignments against a reference genome). If using BLAT, add faToTwoBit,gfClient,gfServer to your PATH. If using BLAST, add blastall and formatdb.
  
 Edit permute.sh to your liking, paying particular attention to the kmer, cvCut, expCov, and other flags
 
