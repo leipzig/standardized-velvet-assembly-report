@@ -11,16 +11,19 @@ Optional:
 Edit permute.sh to your liking, paying particular attention to the kmer, cvCut, expCov, and other flags
 
 To Run:
+
 1. `perl fastaAllSize mysequences.fa > mysequences.stat or gunzip -c mysequences.fa.gz | fastaAllSize > mysequences.stat` Substitute fastqAllSize for fastq files.
 2. `./permute.sh mysequences` (leave out the .fa)
 
 If NOT using a reference genome skip to 6
 If using Blat:
+
 3. faToTwoBit myrefgenome.fa myrefgenome.2bit
 4. gfServer start localhost 9999 myrefgenome.2bit
 5. for f in out*dir; do if [ ! -e $f/contigsVsRef.psl ]; then echo $f; gfClient localhost 9999 ./ $f/contigs.fa $f/contigsVsRef.psl; fi; done
 
 If Using BLAST:
+
 3. formatdb -i myrefgenome -p F
 4. for f in out*dir; do if [ ! -e $f/contigsVsRef.m8 ]; then echo $f; blastall -i $f/contigs.fa -p blastn -d myrefgenome -m 8 -o $f/contigsVsRef.m8; fi; done
 
