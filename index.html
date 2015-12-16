@@ -1,0 +1,113 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Standardized-velvet-assembly-report by leipzig</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <meta name="viewport" content="width=device-width">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Standardized-velvet-assembly-report</h1>
+        <p>Automatically exported from code.google.com/p/standardized-velvet-assembly-report</p>
+
+        <p class="view"><a href="https://github.com/leipzig/standardized-velvet-assembly-report">View the Project on GitHub <small>leipzig/standardized-velvet-assembly-report</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/leipzig/standardized-velvet-assembly-report/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/leipzig/standardized-velvet-assembly-report/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/leipzig/standardized-velvet-assembly-report">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a id="frequently-asked-questions" class="anchor" href="#frequently-asked-questions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Frequently Asked Questions</h1>
+
+<h2>
+<a id="where-can-i-find-more-information-on-n50-length" class="anchor" href="#where-can-i-find-more-information-on-n50-length" aria-hidden="true"><span class="octicon octicon-link"></span></a>Where can I find more information on N50 length?</h2>
+
+<p>This, my most popular blog entry ever, discusses N50 in detail:</p>
+
+<p><a href="http://jermdemo.blogspot.com/2008/11/calculating-n50-from-velvet-output.html">http://jermdemo.blogspot.com/2008/11/calculating-n50-from-velvet-output.html</a></p>
+
+<h2>
+<a id="why-is-the-n50-reported-in-your-report-different-from-the-one-i-see-in-the-log-file-produced-by-velvet" class="anchor" href="#why-is-the-n50-reported-in-your-report-different-from-the-one-i-see-in-the-log-file-produced-by-velvet" aria-hidden="true"><span class="octicon octicon-link"></span></a>Why is the N50 reported in your report different from the one I see in the Log file produced by Velvet</h2>
+
+<p>The N50 in the Log file is in kmer units. The N50 in the report is in bp.</p>
+
+<h2>
+<a id="i-added-kmer-1-to-the-n50-in-the-log-file-and-did-not-arrive-at-the-number-in-your-report-what-is-going-on-here" class="anchor" href="#i-added-kmer-1-to-the-n50-in-the-log-file-and-did-not-arrive-at-the-number-in-your-report-what-is-going-on-here" aria-hidden="true"><span class="octicon octicon-link"></span></a>I added kmer-1 to the N50 in the Log file and did not arrive at the number in your report. What is going on here?</h2>
+
+<p>You can't add kmer-1 to the kmer-N50 to arrive at the bp-N50. The math doesn't work like that. You need to convert all the contig lengths to bp and then calculate N50.</p>
+
+<h2>
+<a id="i-calculated-the-n50-from-my-contigsfa-file-and-got-a-different-answer-from-kmer-n50-or-your-bp-n50-what-the-hell-is-wrong-with-this" class="anchor" href="#i-calculated-the-n50-from-my-contigsfa-file-and-got-a-different-answer-from-kmer-n50-or-your-bp-n50-what-the-hell-is-wrong-with-this" aria-hidden="true"><span class="octicon octicon-link"></span></a>I calculated the N50 from my contigs.fa file and got a different answer from kmer-N50 or your bp-N50. What the hell is wrong with this?</h2>
+
+<p>The contigs.fa contains by default only those contigs longer than 2kmers. Contigs shorter than that are considered spurious. So the N50 of sequences in your contigs.fa file will be considerably higher than that calculated from using the stats.txt file.</p>
+
+<h2>
+<a id="why-do-i-get-different-read-usage-numbers-when-i-specify--useamos-in-generateassemblystatspl-" class="anchor" href="#why-do-i-get-different-read-usage-numbers-when-i-specify--useamos-in-generateassemblystatspl-" aria-hidden="true"><span class="octicon octicon-link"></span></a>Why do I get different read usage numbers when I specify -useamos in generateAssemblyStats.pl? ==</h2>
+
+<p>I think this is usually a side effect of allowing N's in your input sequences. Velvet will convert these to A's. If there is another read with a real A at that position Velvet will consider the N-posing-as-A read as used and the honest-A read as unused. The point being you should just leave out or trim sequences with Ns.</p>
+
+<h2>
+<a id="i-dont-understand-what-should-i-use-as-input---contigs-or-reads-" class="anchor" href="#i-dont-understand-what-should-i-use-as-input---contigs-or-reads-" aria-hidden="true"><span class="octicon octicon-link"></span></a>I don't understand what should I use as input - contigs or reads? ==</h2>
+
+<p>Use quality trimmed reads as input.</p>
+
+<h2>
+<a id="what-should-i-use-to-quality-trim-my-reads" class="anchor" href="#what-should-i-use-to-quality-trim-my-reads" aria-hidden="true"><span class="octicon octicon-link"></span></a>What should I use to quality trim my reads?</h2>
+
+<p>Nikhil Joshi's Trim will handle soft trimming with pair mate widows</p>
+
+<p><a href="http://wiki.bioinformatics.ucdavis.edu/index.php/Trim.pl">http://wiki.bioinformatics.ucdavis.edu/index.php/Trim.pl</a></p>
+
+<p>Joseph Fass's TrimBWAStyle is a slightly different algorithm</p>
+
+<p><a href="http://wiki.bioinformatics.ucdavis.edu/index.php/TrimBWAstyle.pl">http://wiki.bioinformatics.ucdavis.edu/index.php/TrimBWAstyle.pl</a></p>
+
+<h2>
+<a id="how-should-i-use-your-report" class="anchor" href="#how-should-i-use-your-report" aria-hidden="true"><span class="octicon octicon-link"></span></a>How should I use your report?</h2>
+
+<p>This report simply provides a way of visualizing the effect of kmer and cvCut on your assemblies.</p>
+
+<p>If you find that your assemblies "converge" or arrive at roughly the same results, then you can choose one arbitrarily and move on. If you find that your assemblies are scattered across the landscape of size, contig count, read usage, and N50, then you will need to consider what levels of stringency and sensitivity you are willing to accept.</p>
+
+<p>Any assembly will be composed of:</p>
+
+<ul>
+<li>correct contigs</li>
+<li>fragmented contigs</li>
+<li>chimeric contigs</li>
+<li>spurious contigs</li>
+</ul>
+
+<p>and may suffer from:</p>
+
+<ul>
+<li>missing contigs</li>
+</ul>
+
+<p>I would consider chimeras and spurious contigs to be distinguished by length - spurious contigs are an artifact of the debruijn method and are very short. I don't think chimeras are very common in Velvet compared to other assemblers - any ambiguity normally results in fragments.</p>
+
+<p>Velvet assemblies performed under high stringency (high kmer, high cvCut) conditions will minimize chimeric, fragmented and spurious contigs at the expense of more missing contigs.</p>
+
+<p>To validate a de-novo short read assembly, especially a transcriptome which by its very nature will never form long contigs, you need to decide whether you are willing to accept some bad with the good or insist on just the good and get less of it. This is a classic signal-to-noise problem.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/leipzig">leipzig</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
