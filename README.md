@@ -1,3 +1,5 @@
+Questions? [Read the FAQ](http://leipzig.github.io/standardized-velvet-assembly-report/)
+
 Requirements:
 - velvet (velveth velvetg should be in your PATH)
 - R (with Sweave)
