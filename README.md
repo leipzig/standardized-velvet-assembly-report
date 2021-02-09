@@ -1,3 +1,5 @@
+
+
 Questions? [Read the FAQ](http://leipzig.github.io/standardized-velvet-assembly-report/)
 
 Requirements:
@@ -40,3 +42,7 @@ If Using BLAST:
      echo "refName<-\"My reference genome\";assmName<-\"mysequences\";statFile<-\"mysequences\"; Sweave(\"refReport.Rnw\",output=\"mysequences.tex\");" | R --no-save --quiet
 9. pdflatex mysequences.tex
 10. View the pdf report mysequences.pdf
+
+--
+
+The Standardized Velvet Assembly Report has been used in [some publications](https://scholar.google.com/scholar?hl=en&as_sdt=0%2C39&q=%22standardized+velvet+assembly+report%22)
